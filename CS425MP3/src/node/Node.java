@@ -30,8 +30,9 @@ public class Node {
 	long timeStamp;
 	int state;// 0 released, 1 wanted, 2 held
 	boolean sentInquire;
+	int options;
 
-	public Node(int identifier, int time1, int time2, int time3)
+	public Node(int identifier, int time1, int time2, int time3,int ops)
 			throws InterruptedException {
 		this.identifier = identifier;
 		this.initTime = time1;
@@ -47,6 +48,7 @@ public class Node {
 		receivedReplys = new Hashtable<Integer, Integer>();
 		state = 0;
 		sentInquire = false;
+		options=ops;
 	}
 
 	public void printNodeStatus() {
@@ -73,12 +75,7 @@ public class Node {
 	}
 
 	public synchronized void printNode(Message m) {
-		System.out.println("Node " + identifier + " received " + m.getName());
-		System.out.print("Waiting queue: ");
-		for (Message mm : waitingQueue) {
-			System.out.print(mm.From + " ");
-		}
-		System.out.println();
+		System.out.println(new Date().getTime()+" node " + identifier + " received a message from "+ m.From +", as "+ m.getName());
 	}
 
 	public void handleMessages(String line) {
@@ -88,8 +85,8 @@ public class Node {
 		} catch (ClassNotFoundException | ParseException | IOException e) {
 			e.printStackTrace();
 		}
-		// printNodeStatus();
-		// printNode(m);
+		if(options==1)
+			printNode(m);
 		switch (m.Operation) {
 		case 0:
 			onReceiveRequest(m);
@@ -118,15 +115,15 @@ public class Node {
 
 		}
 		if (topQueue == null) {
-			System.out.println("I am " + this.identifier
-					+ ", I received a release from " + m.From);
+//			System.out.println("I am " + this.identifier
+//					+ ", I received a release from " + m.From);
 			synchronized (this) {
 				granted = false;
 				grantedMessage = null;
 			}
 		} else {
-			System.out.println("I am " + this.identifier
-					+ ", I received a release and granted " + topQueue.From);
+//			System.out.println("I am " + this.identifier
+//					+ ", I received a release and granted " + topQueue.From);
 			reply.From = this.identifier;
 			reply.To = topQueue.From;// The top requester
 			reply.Operation = 1;// Grant
@@ -182,8 +179,8 @@ public class Node {
 	public synchronized void onReceiveRequest(Message m) {
 		if (!granted && !(state == 2))// Not yet granted permission to anyone
 		{
-			System.out.println("I am " + this.identifier + ", I am granting "
-					+ m.From + " " + granted);
+//			System.out.println("I am " + this.identifier + ", I am granting "
+//					+ m.From + " " + granted);
 			Message reply = new Message();
 			reply.From = this.identifier;
 			reply.To = m.From;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 public class Main {
 	public static int deadLock(int[][] waitForGraph,int pos,int target,boolean checked)
@@ -31,7 +32,7 @@ public class Main {
 		Node[] nodes=new Node[9];
 		for(int i=0;i<9;i++)
 		{
-			nodes[i]=new Node(i,Integer.parseInt(args[0]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+			nodes[i]=new Node(i,Integer.parseInt(args[0]),Integer.parseInt(args[1]),Integer.parseInt(args[2]),Integer.parseInt(args[3]));
 			Thread.sleep(100);
 		}
 		for(int i=0;i<9;i++)
@@ -43,47 +44,12 @@ public class Main {
 		{
 			clients[i].start();
 		}
-		while(true)
+		long start=new Date().getTime();
+		while((new Date().getTime()-start)<(Integer.parseInt(args[2])*1000))
 		{
-//			System.out.println("********************************");
-//			for(int i=0;i<9;i++)
-//				nodes[i].printNodeStatus();
-//			System.out.println("********************************");
-//			int[][] waitForGraph=new int[9][9];
-//			for(int i=0;i<9;i++)
-//			{
-//				for(int key:nodes[i].receivedReplys.keySet())
-//				{
-//					if(nodes[key].grantedMessage!=null)
-//					{
-//						if(i==nodes[key].grantedMessage.From)
-//						{
-//							continue;
-//						}
-//							
-//						waitForGraph[i][nodes[key].grantedMessage.From]=1;
-//					}
-//						
-//				}
-//			}
-//			ArrayList<Node> abandonNodes=new ArrayList<Node>();
-//			for(int i=0;i<9;i++)
-//			{
-//				int abandonProcess=deadLock(waitForGraph,i,i,false);
-//				if(abandonProcess>=0)
-//				{
-//					System.out.println("Deadlock in "+abandonProcess);
-//					abandonNodes.add(nodes[abandonProcess]);
-//					
-//				}
-//			}
-//			if(abandonNodes.size()>0)
-//			{
-//				Collections.sort(abandonNodes, new NodeComparator());
-//				nodes[abandonNodes.get(abandonNodes.size()-1).identifier].abandon=true;
-//			}
 			Thread.sleep(1000);
 		}
+		System.exit(0);
 		
 	}
 	

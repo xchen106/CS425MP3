@@ -55,15 +55,9 @@ public class Client extends Thread {
 				}
 			}
 		}
-		System.out.println("Node "+this.identifier);
-		for(int k:node.mySockets.keySet())
-		{
-			System.out.print(k+" ");
-		}
 	}
 	public void run() {
 		
-		long beginTime=new Date().getTime();
 		while(true)
 		{
 			synchronized(this)
@@ -94,12 +88,15 @@ public class Client extends Thread {
 					Thread.sleep(100);
 				}
 				
-				System.out.println("Node "+identifier+" is in critical section!!!!");
+				System.out.print(new Date().getTime()+" ,node "+identifier+" is in critical section! Granted by ");
+				for(int key:node.receivedReplys.keySet())
+					if(node.receivedReplys.get(key)==1)
+						System.out.print(key+" ");
+				System.out.println();
 				//Enter critical section
 				node.state=2;
 				Thread.sleep(node.initTime*1000);
-				System.out.println("Node "+identifier+" is leaving critical section!!!!");
-				}
+			}
 				
 			 catch (InterruptedException e) {
 				// TODO Auto-generated catch block
